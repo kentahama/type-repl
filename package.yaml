@@ -1,0 +1,28 @@
+name: type-repl
+version: '0.1.0.0'
+category: Web
+author: Kenta Hamanaka
+maintainer: kenta.hamanaka@gmail.com
+copyright: 2017 kentahama
+license: BSD3
+github: kentahama/type-repl
+extra-source-files:
+  - README.md
+library:
+  source-dirs: src
+  dependencies:
+    - base >= 4.7 && < 5.0
+executables:
+  type-repl-exe:
+    main: Main.hs
+    source-dirs: app
+    dependencies:
+      - base
+      - type-repl
+tests:
+  type-repl-test:
+    main: Spec.hs
+    source-dirs: test
+    dependencies:
+      - base
+      - type-repl
