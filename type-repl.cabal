@@ -30,6 +30,8 @@ library
     , containers
     , mtl
   exposed-modules:
+      Lambda
+      LambdaTyping
       Lib
       Unification
   default-language: Haskell2010
@@ -52,5 +54,6 @@ test-suite type-repl-test
       base
     , type-repl
   other-modules:
+      LambdaTypingTest
       UnificationTest
   default-language: Haskell2010
