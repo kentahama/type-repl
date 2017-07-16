@@ -14,6 +14,7 @@ library:
     - base >= 4.7 && < 5.0
     - containers
     - mtl
+    - parsec
 executables:
   type-repl-exe:
     main: Main.hs
