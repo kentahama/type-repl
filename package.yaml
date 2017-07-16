@@ -16,12 +16,13 @@ library:
     - mtl
     - parsec
 executables:
-  type-repl-exe:
+  type-repl:
     main: Main.hs
     source-dirs: app
     dependencies:
       - base
       - type-repl
+      - haskeline
 tests:
   type-repl-test:
     main: Spec.hs
