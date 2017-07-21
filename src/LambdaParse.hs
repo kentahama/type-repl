@@ -3,42 +3,38 @@ module LambdaParse where
 import Prelude hiding (abs)
 import qualified Lambda
 import Text.Parsec as P
+import Text.Parsec.String
 
-exprParser :: Parsec String u Lambda.Expr
-exprParser = do
-  e <- expr
-  eof
-  return e
+exprParser :: Parser Lambda.Expr
+exprParser = spaces *> expr <* spaces <* eof
 
-expr :: Parsec String u Lambda.Expr
-expr = var <|> abs <|> app
+expr :: Parser Lambda.Expr
+expr = do
+  t <- term
+  ts <- many $ many1 space *> term
+  return $ foldr (flip Lambda.App) t (reverse ts)
 
-vname :: Parsec String u Lambda.Vname
+term :: Parser Lambda.Expr
+term = try var <|> try abs <|> paren expr
+
+paren :: Parser a -> Parser a
+paren = between (char '(') (char ')')
+
+vname :: Parser Lambda.Vname
 vname = many1 letter
 
-var :: Parsec String u Lambda.Expr
-var = do
-  x <- try vname
-  return $ Lambda.Var x
+var :: Parser Lambda.Expr
+var = Lambda.Var <$> vname
 
-abs :: Parsec String u Lambda.Expr
+abs :: Parser Lambda.Expr
 abs = do
-  try $ char '\\'
+  char '\\'
   x <- vname
   spaces
   string "->"
   spaces
   e <- expr
   return $ Lambda.Abs x e
-
-app :: Parsec String u Lambda.Expr
-app = do
-  try $ char '('
-  e1 <- expr
-  many1 space
-  e2 <- expr
-  char ')'
-  return $ Lambda.App e1 e2
 
 parse :: String -> Either ParseError Lambda.Expr
 parse = P.parse exprParser ""

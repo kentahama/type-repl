@@ -34,7 +34,6 @@ library
       Lambda
       LambdaParse
       LambdaTyping
-      Lib
       Unification
   default-language: Haskell2010
 
