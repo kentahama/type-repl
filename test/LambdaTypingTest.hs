@@ -1,7 +1,7 @@
 module LambdaTypingTest where
 
-import Lambda
-import LambdaTyping
+import Data.Lambda.Simple
+import Data.Lambda.Simple.Typing
 
 termK :: Expr
 termK = Abs "x" $ Abs "y" $ Var "x"

@@ -1,4 +1,4 @@
-module Lambda where
+module Data.Lambda.Simple where
 
 type TypeVname = String
 type Vname = String

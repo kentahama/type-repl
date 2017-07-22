@@ -1,6 +1,6 @@
 module LambdaParseTest (main) where
 
-import LambdaParse
+import Data.Lambda.Simple.Parser
 
 main = do
   print $ parse "\\x -> x"

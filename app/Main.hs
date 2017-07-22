@@ -1,7 +1,7 @@
 module Main where
 
-import LambdaParse
-import LambdaTyping
+import Data.Lambda.Simple.Parser
+import Data.Lambda.Simple.Typing
 import System.Console.Haskeline
 
 main :: IO ()

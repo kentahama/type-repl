@@ -1,4 +1,4 @@
-module Unification where
+module Control.SyntacticUnification where
 
 import Data.Maybe (fromMaybe)
 import Data.List (intercalate)

@@ -1,6 +1,6 @@
 module UnificationTest where
 
-import Unification
+import Control.SyntacticUnification
 import Data.List
 
 prob1 :: Problem

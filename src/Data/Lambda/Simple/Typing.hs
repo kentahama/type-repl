@@ -1,8 +1,8 @@
 {-# LANGUAGE FlexibleContexts #-}
-module LambdaTyping where
+module Data.Lambda.Simple.Typing where
 
-import Lambda
-import Unification hiding (Vname)
+import Data.Lambda.Simple
+import Control.SyntacticUnification hiding (Vname)
 
 import Control.Monad.RWS hiding (lift)
 import Data.List (nub)

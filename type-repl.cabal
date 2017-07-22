@@ -31,10 +31,10 @@ library
     , mtl
     , parsec
   exposed-modules:
-      Lambda
-      LambdaParse
-      LambdaTyping
-      Unification
+      Control.SyntacticUnification
+      Data.Lambda.Simple
+      Data.Lambda.Simple.Parser
+      Data.Lambda.Simple.Typing
   default-language: Haskell2010
 
 executable type-repl

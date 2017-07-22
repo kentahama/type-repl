@@ -1,7 +1,7 @@
-module LambdaParse where
+module Data.Lambda.Simple.Parser where
 
 import Prelude hiding (abs)
-import qualified Lambda
+import qualified Data.Lambda.Simple as Lambda
 import Text.Parsec as P
 import Text.Parsec.String
 
