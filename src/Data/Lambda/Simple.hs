@@ -8,7 +8,7 @@ data Type = TypeVar TypeVname
 
 data Expr = Var Vname
           | Abs Vname Expr
-          | App Expr Expr
+          | App Expr Expr deriving Eq
 
 showType :: Type -> String
 showType (TypeVar a) = a
