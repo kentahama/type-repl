@@ -54,9 +54,10 @@ test-suite type-repl-test
       test
   build-depends:
       base
+    , hspec
     , type-repl
   other-modules:
-      LambdaParseTest
-      LambdaTypingTest
-      UnificationTest
+      Control.SyntacticUnificationTest
+      Data.Lambda.Simple.ParserTest
+      Data.Lambda.Simple.TypingTest
   default-language: Haskell2010

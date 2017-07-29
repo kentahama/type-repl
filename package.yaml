@@ -29,4 +29,5 @@ tests:
     source-dirs: test
     dependencies:
       - base
+      - hspec
       - type-repl

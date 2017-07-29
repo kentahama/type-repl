@@ -1,5 +1,6 @@
 module Control.SyntacticUnificationTest where
 
+import Test.Hspec
 import Control.SyntacticUnification
 
 prob1 :: Problem
@@ -9,21 +10,22 @@ prob1 = [
   ]
 
 mgu1 :: Subst
-mgu1 = unify prob1
+mgu1 = [
+  ("y", T "g" [T "b" []]),
+  ("x", T "a" [])
+  ]
 
 term1 :: Term
 term1 = T "f" [V "x", V "y"]
 
-substedTerm1 :: Term
-substedTerm1 = lift mgu1 term1
+sTerm1 :: Term
+sTerm1 = T "f" [T "a" [], T "g" [T "b" []]]
 
-main :: IO ()
-main = do
-  putStrLn "Problem 1: "
-  putStrLn $ showProblem prob1
-  putStrLn "mgu 1: "
-  putStrLn $ showSubst mgu1
-  putStrLn "Term 1: "
-  putStrLn $ showTerm term1
-  putStrLn "Substituted term 1: "
-  putStrLn $ showTerm substedTerm1
+mainTests :: IO ()
+mainTests = hspec $ do
+  describe "unify" $ do
+    it "returns the mgu when given a unification problem" $
+      unify prob1 `shouldBe` mgu1
+  describe "lift" $ do
+    it "returns a substituted term when given a substitution and a term" $
+      lift mgu1 term1 `shouldBe` sTerm1
