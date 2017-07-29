@@ -1,7 +1,6 @@
-module UnificationTest where
+module Control.SyntacticUnificationTest where
 
 import Control.SyntacticUnification
-import Data.List
 
 prob1 :: Problem
 prob1 = [

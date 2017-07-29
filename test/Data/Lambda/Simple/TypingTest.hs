@@ -1,4 +1,4 @@
-module LambdaTypingTest where
+module Data.Lambda.Simple.TypingTest where
 
 import Data.Lambda.Simple
 import Data.Lambda.Simple.Typing

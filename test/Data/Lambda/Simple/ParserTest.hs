@@ -1,4 +1,4 @@
-module LambdaParseTest (main) where
+module Data.Lambda.Simple.ParserTest where
 
 import Data.Lambda.Simple.Parser
 
