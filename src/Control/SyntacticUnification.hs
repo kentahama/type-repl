@@ -12,6 +12,10 @@ data Term = V Vname | T Funcname [Term] deriving (Eq)
 type Subst = [(Vname, Term)]
 type Problem = [(Term, Term)]
 
+data UnifyResult = OK
+                 | OccurError String
+                 | FuncNameDifferError String
+
 showTerm :: Term -> String
 showTerm (V x) = x
 showTerm (T f ts) = f ++ "(" ++ showArgs ts ++ ")" where
@@ -48,23 +52,27 @@ occurs :: Vname -> Term -> Bool
 occurs x (V y) = x == y
 occurs x (T _ ts) = any (occurs x) ts
 
-solve :: Problem -> State Subst ()
-solve [] = return ()
+solve :: Problem -> State Subst UnifyResult
+solve [] = return OK
 solve ((V x, t):ps) = if V x == t
   then solve ps
   else elim x t ps
 solve ((t, V x):ps) = elim x t ps
 solve ((T f ts, T g us):ps) | f == g = solve (zip ts us ++ ps)
-solve ((T f ts, T g us):ps) = fail $ f ++ " differs from " ++ g
+solve ((T f ts, T g us):ps) = return $ FuncNameDifferError $ f ++ " differs from " ++ g
 
-elim :: Vname -> Term -> Problem -> State Subst ()
-elim x t ps | occurs x t = fail $ x ++ " is in " ++ show t
+elim :: Vname -> Term -> Problem -> State Subst UnifyResult
+elim x t ps | occurs x t = return $ OccurError $ x ++ " is in " ++ show t
 elim x t ps = do
   let x2t = lift [(x, t)]
   modify $ map (second x2t)
   modify $ (:) (x, t)
   solve (mapProb x2t ps)
 
-unify :: Problem -> Subst
-unify ps = s where
-  (_, s) = runState (solve ps) []
+unify :: Problem -> Either String Subst
+unify ps = esubst where
+  (result, subst) = runState (solve ps) []
+  esubst = case result of
+    OK -> Right subst
+    FuncNameDifferError err -> Left err
+    OccurError err -> Left err

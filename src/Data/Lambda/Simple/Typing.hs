@@ -2,9 +2,9 @@
 module Data.Lambda.Simple.Typing where
 
 import Data.Lambda.Simple
-import Control.SyntacticUnification hiding (Vname)
+import Control.SyntacticUnification as U hiding (Vname)
 
-import Control.Monad.RWS hiding (lift)
+import Control.Monad.RWS as RWS
 import Data.List (nub)
 import Data.Maybe (fromMaybe)
 import Control.Arrow ((***))
@@ -25,13 +25,13 @@ addConstraint a b = tell [(a, b)]
 addCtx :: Vname -> Type -> Context -> Context
 addCtx x a = (:) (x, a)
 
-typing :: Expr -> RWS Context Constraint Int Type
+typing :: Expr -> RWST Context Constraint Int (Either String) Type
 typing t = case t of
   Var x -> do
     maybet <- reader $ lookup x
     case maybet of
       Just t -> return t
-      Nothing -> fail $ x ++ " is not in the context."
+      Nothing -> RWS.lift $ Left $ x ++ " is not in the context."
   Abs x e -> do
     alpha <- newVar
     t <- local (addCtx x alpha) (typing e)
@@ -43,15 +43,18 @@ typing t = case t of
     addConstraint t1 (t2 `Arrow` beta)
     return beta
 
-typeof :: Expr -> Type
-typeof e = renameVars $ resolve typ cnstr where
-  (typ, _, cnstr) = runRWS (typing e) initialCtx initialVarNum
-  initialCtx = []
-  initialVarNum = 0
+typeof :: Expr -> Either String Type
+typeof e = do
+  let initialCtx = []
+      initialVarNum = 0
+  (typ, cnstr) <- evalRWST (typing e) initialCtx initialVarNum
+  t <- resolve typ cnstr
+  return $ renameVars t
 
-resolve :: Type -> Constraint -> Type
-resolve t c = toType $ lift subst $ fromType t where
-  subst = unify $ fromConstr c
+resolve :: Type -> Constraint -> Either String Type
+resolve t c = do
+  subst <- unify $ fromConstr c
+  return $ toType $ U.lift subst $ fromType t
 
 fromType :: Type -> Term
 fromType (TypeVar a) = V a
