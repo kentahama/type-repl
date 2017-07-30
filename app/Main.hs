@@ -19,5 +19,7 @@ loop = do
 
 printeval :: String -> InputT IO ()
 printeval s = case parse s of
-  Left error -> outputStrLn $ "Parse error: " ++ show error
-  Right exp  -> outputStrLn $ show exp ++ " :: " ++ show (typeof exp)
+  Left parseErr -> outputStrLn $ "Parse error: " ++ show parseErr
+  Right exp  -> case typeof exp of
+    Left typeErr -> outputStrLn $ "Type error: " ++ typeErr
+    Right typ -> outputStrLn $ show exp ++ " :: " ++ show typ
