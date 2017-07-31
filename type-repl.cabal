@@ -60,4 +60,5 @@ test-suite type-repl-test
       Control.SyntacticUnificationTest
       Data.Lambda.Simple.ParserTest
       Data.Lambda.Simple.TypingTest
+      Data.Lambda.SimpleTest
   default-language: Haskell2010
