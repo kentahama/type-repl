@@ -13,11 +13,9 @@ data Expr = Var Vname
 showType :: Type -> String
 showType (TypeVar a) = a
 showType (Arrow (Arrow t1 t2) t3) = concat
-  ["(", showType t1, to, showType t2, ")", to, showType t3]
-  where to = " -> "
+  ["(", showType (Arrow t1 t2), ") -> ", showType t3]
 showType (Arrow t1 t2) = concat
-  [showType t1, to, showType t2]
-  where to = " -> "
+  [showType t1, " -> ", showType t2]
 
 instance Show Type where
   show = showType
@@ -27,7 +25,7 @@ showExpr (Var x) = x
 showExpr (Abs x e) = concat
   ["(\\", x, " -> ", showExpr e, ")"]
 showExpr (App e1 (App e2 e3)) = concat
-  [showExpr e1, " (", showExpr e2, " ", showExpr e3, ")"]
+  [showExpr e1, " (", showExpr (App e2 e3), ")"]
 showExpr (App e1 e2) = concat
   [showExpr e1, " ", showExpr e2]
 
