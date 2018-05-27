@@ -2,37 +2,42 @@ module Data.Lambda.Simple.Parser where
 
 import Prelude hiding (abs)
 import qualified Data.Lambda.Simple as Lambda
-import Text.Parsec as P
-import Text.Parsec.String
+import Text.Parsec as P hiding (token)
+
+type Parser = Parsec String ()
 
 exprParser :: Parser Lambda.Expr
-exprParser = spaces *> expr <* spaces <* eof
+exprParser = expr <* eof
 
 expr :: Parser Lambda.Expr
 expr = do
   t <- term
-  ts <- many $ many1 space *> term
+  ts <- many term
   return $ foldr (flip Lambda.App) t (reverse ts)
 
 term :: Parser Lambda.Expr
-term = try var <|> try abs <|> paren expr
+term = var <|> abs <|> paren expr
+
+token :: Parser a -> Parser a
+token t = t <* spaces
+
+symbol :: String -> Parser String
+symbol = token . string
 
 paren :: Parser a -> Parser a
-paren = between (char '(') (char ')')
+paren = between (symbol "(") (symbol ")")
 
 vname :: Parser Lambda.Vname
-vname = many1 letter
+vname = token $ many1 letter
 
 var :: Parser Lambda.Expr
 var = Lambda.Var <$> vname
 
 abs :: Parser Lambda.Expr
 abs = do
-  char '\\'
+  symbol "\\"
   x <- vname
-  spaces
-  string "->"
-  spaces
+  symbol "->"
   e <- expr
   return $ Lambda.Abs x e
 
