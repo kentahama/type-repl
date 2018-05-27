@@ -1,6 +1,8 @@
--- This file has been generated from package.yaml by hpack version 0.17.0.
+-- This file has been generated from package.yaml by hpack version 0.28.2.
 --
 -- see: https://github.com/sol/hpack
+--
+-- hash: 57884155e86f57abbc629bddcfde52070af1540f4faae938996b80c636e922aa
 
 name:           type-repl
 version:        0.1.0.0
@@ -14,7 +16,6 @@ license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
 cabal-version:  >= 1.10
-
 extra-source-files:
     README.md
 
@@ -26,7 +27,7 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base >= 4.7 && < 5.0
+      base >=4.7 && <5.0
     , containers
     , mtl
     , parsec
@@ -35,16 +36,20 @@ library
       Data.Lambda.Simple
       Data.Lambda.Simple.Parser
       Data.Lambda.Simple.Typing
+  other-modules:
+      Paths_type_repl
   default-language: Haskell2010
 
 executable type-repl
   main-is: Main.hs
+  other-modules:
+      Paths_type_repl
   hs-source-dirs:
       app
   build-depends:
       base
-    , type-repl
     , haskeline
+    , type-repl
   default-language: Haskell2010
 
 test-suite type-repl-test
@@ -61,4 +66,5 @@ test-suite type-repl-test
       Data.Lambda.Simple.ParserTest
       Data.Lambda.Simple.TypingTest
       Data.Lambda.SimpleTest
+      Paths_type_repl
   default-language: Haskell2010
